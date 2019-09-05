@@ -12,7 +12,8 @@ public abstract class AsmAop {
         // 1. 创建 ClassReader 读入 .class 文件到内存中
         ClassReader reader = new ClassReader(in);
         // 2. 创建 ClassWriter 对象，将操作之后的字节码的字节数组回写
-        ClassWriter writer = new ClassWriter(reader, ClassWriter.COMPUTE_MAXS);
+        //ClassWriter writer = new ClassWriter(reader, ClassWriter.COMPUTE_MAXS);
+        ClassWriter writer = new ClassWriter(reader, ClassWriter.COMPUTE_FRAMES);
         // 3. 创建自定义的 ClassVisitor 对象
         ClassVisitor change = new ClassAopVisitor(writer);
         // 4. 将 ClassVisitor 对象传入 ClassReader 中
