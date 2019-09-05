@@ -1,9 +1,11 @@
 package org.wt.asm.aop;
+import groovy.lang.GroovyClassLoader;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 
 import java.io.*;
+import java.lang.reflect.Method;
 
 public abstract class AsmAop {
     public static byte[] transform(String classname, InputStream in) throws Exception{
@@ -22,13 +24,32 @@ public abstract class AsmAop {
     }
 
     public static void main(String[] args) throws Exception {
-        String className = AsmAop.class.getName();
-        InputStream in = AsmAop.class.getResourceAsStream("AsmAop.class");
+        String filename = System.getProperty("user.dir") + "/src/test/resources/org/wt/asm/aop/Demo.class";
+
+        /*if(new File(filename).exists()){
+            return;
+        }*/
+
+        String className = "org.wt.asm.aop.Demo";
+        InputStream in = AsmAop.class.getResourceAsStream("Demo.class");
         byte[] code = transform(className,in);
-        String filename = System.getProperty("user.dir") + "/src/test/resources/org/wt/AsmAop.class";
         new File(filename).getParentFile().mkdirs();
         FileOutputStream fos = new FileOutputStream(filename);    // 将二进制流写到本地磁盘上
         fos.write(code);
         fos.close();
+        MyClassLoader cl = new MyClassLoader();
+        //GroovyClassLoader cl = new GroovyClassLoader();
+        Class clazz = cl.defineClass(className,code);
+        //clazz = cl.loadClass(className);
+        Object personObj = clazz.newInstance();
+        Method nameMethod = clazz.getDeclaredMethod("test", String[].class);
+        nameMethod.setAccessible(true);
+        MethodAop.map.put(className,new MethodAop(cl,className){
+            @Override
+            public Object doInvoke(Class clazz, Object target, Method method, Method proceed, Object[] args) throws Throwable {
+                return super.doInvoke(clazz, target, method, proceed, args);
+            }
+        });
+        nameMethod.invoke(personObj, new Object[]{new String[]{"a","b","c"}});
     }
 }
