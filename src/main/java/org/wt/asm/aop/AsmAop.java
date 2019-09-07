@@ -6,9 +6,13 @@ import org.objectweb.asm.ClassWriter;
 
 import java.io.*;
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.util.Properties;
 
 public abstract class AsmAop {
     public static byte[] transform(String classname, InputStream in) throws Exception{
+
         // 1. 创建 ClassReader 读入 .class 文件到内存中
         ClassReader reader = new ClassReader(in);
         // 2. 创建 ClassWriter 对象，将操作之后的字节码的字节数组回写
@@ -25,6 +29,10 @@ public abstract class AsmAop {
     }
 
     public static void main(String[] args) throws Exception {
+        String userDir = System.getProperty("user.dir");
+        File f = new File(userDir,"src/test/resources/test.txt");
+        System.out.println(f.exists());
+
         String filename = System.getProperty("user.dir") + "/src/test/resources/org/wt/asm/aop/Demo.class";
 
         /*if(new File(filename).exists()){

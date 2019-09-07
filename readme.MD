@@ -1,9 +1,10 @@
-all https://segmentfault.com/a/1190000009956534
+asm官网 asm.ow2.org
+asm介绍很全面的博客 https://segmentfault.com/a/1190000009956534
 
-asm add-field,add-method
+asm添加字段，添加方法例子
 https://www.jianshu.com/p/905be2a9a700
 
-asm-tree
+asm-tree例子
 https://www.iteye.com/blog/yunshen0909-2226662
 
 # jvm指令执行模型
@@ -29,8 +30,3 @@ https://www.iteye.com/blog/yunshen0909-2226662
 ## 修改方法
 ## 
 # 参考资料
-
-desc
-classname
-internalClassname
-
